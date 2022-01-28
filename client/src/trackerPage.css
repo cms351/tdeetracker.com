@@ -1,0 +1,85 @@
+.trackerPage {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;  
+  }
+
+.row {
+    display: table; 
+    table-layout: fixed; 
+    width: 100%; 
+    flex-direction: row; 
+}
+
+.dataPoint, .emptyDataPoint, .weekAverage {
+    display: table-cell; 
+    width: 10%; 
+    vertical-align: top; 
+    border-style: double; 
+}
+
+.dataPoint {
+    background-color: lightgrey; 
+}
+
+.emptyDataPoint {
+    background-color: darkgrey; 
+}
+
+.weekAverage {
+    background-color: lightgreen; 
+}
+
+
+.deleteEntry {
+    left: 0px; 
+    bottom: 0px; 
+    width: 100%; 
+    text-align: left; 
+}
+
+button {
+    border: none; 
+    color: white;  
+    cursor: pointer; 
+    background-color: black; 
+    border-radius: 8px; 
+}
+
+.dangerButton {
+    background-color: red; 
+}
+
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0px; 
+    left: 0px; 
+    background-color: lightgoldenrodyellow; 
+  }
+  
+  #lFooter, #mFooter, #rFooter {
+    width: 32%; 
+    display: inline-block; 
+    vertical-align: top; 
+  }
+  
+  #lFooter {
+    left: 0px; 
+    text-align: left; 
+    margin-left: 2%; 
+  }
+  
+  #mFooter {
+    text-align: center; 
+  }
+  
+  #rFooter {
+    right: 0px; 
+    text-align: right;  
+    margin-right: 2%; 
+  }
+
+  #margin-needed {
+    margin-left: 5px; 
+  }
