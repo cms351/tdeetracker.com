@@ -2,26 +2,54 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 function contact() {
+
+  document.title = "Dev Resume - TDEETracker.com"; 
+
+  function w3_open() {
+        
+        if (
+            document.getElementById("mySidebar") &&
+            document.getElementById("main")
+        ) {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebar").style.width = "25%"; 
+            document.getElementById("mySidebar").style.display = "block"; 
+        }
+    }
+
+    function w3_close() {
+        if (
+            document.getElementById("mySidebar") &&
+            document.getElementById("main") &&
+            document.getElementById("myOverlay")
+        ) {
+            document.getElementById("main").style.marginLeft = "0%"; 
+            document.getElementById("mySidebar").style.width = "0%"; 
+            document.getElementById("mySidebar").style.display = 'none'; 
+            document.getElementById("myOverlay").style.display = 'none'; 
+        }
+    }
+
     return <div className = "contactPage">
 
         {/* external stylesheets */ }
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
         <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+        <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css"/>
 
         <body class="w3-light-grey">
 
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
-                <a href="/" class="w3-bar-item w3-button w3-theme-l1"><i class="fa fa-home fa-fw w3-margin-left w3-large w3-text-black"></i>Home</a>
+                <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
 
 <div class="w3-content">
 
-  <div class="w3-row-padding">
+  <div class="w3-row w3-padding-64">
 
     <div class="w3-container">
         <h1 class="w3-text-teal">About the Developer</h1>

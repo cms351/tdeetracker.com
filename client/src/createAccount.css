@@ -1,28 +1,12 @@
-html, body {
-  margin: 0; 
-  padding: 0;
-}
-
 html, body, h1, h2, h3, h4, h5, h6 {
   font-family: "Roboto", sans-serif;
 }
 
-.w3-sidebar {
-  z-index: 3;
-  width: 250px; 
-  top: 43px; 
-  bottom: 0; 
-  height: inherit; 
-}
 
 .w3-overlay, .w3-hide-large {
   cursor: 'pointer'; 
 }
 
-.w3-main {
-  margin-left: 250px; 
-  margin-right: 3%; 
-}
 
 #register {
   margin-left: 5px; 

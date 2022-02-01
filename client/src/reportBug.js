@@ -5,6 +5,9 @@ import {BrowserRouter as Router, Route, Switch, Link, useHistory } from "react-r
 import Axios from 'axios';
 
 function ReportBug () {
+
+    document.title = "Report Bug - TDEETracker.com"; 
+
     const [characterCount, setCharacterCount] = useState(0); 
     const [characterCount2, setCharacterCount2] = useState(0); 
     const [description, setDescription] = useState("");
@@ -23,7 +26,7 @@ function ReportBug () {
         else {
             document.getElementById("confirmation").innerHTML = "Loading..."; 
 
-            Axios.post("http://localhost:3001/submitBug", {
+            Axios.post("http://tdeetracker.com:3001/submitBug", {
                 description: description,
                 cause: cause,
             }
@@ -32,6 +35,31 @@ function ReportBug () {
             }).catch((error) => { console.log(error) } ); 
         }
     };
+
+    function w3_open() {
+        
+        if (
+            document.getElementById("mySidebar") &&
+            document.getElementById("main")
+        ) {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebar").style.width = "25%"; 
+            document.getElementById("mySidebar").style.display = "block"; 
+        }
+    }
+
+    function w3_close() {
+        if (
+            document.getElementById("mySidebar") &&
+            document.getElementById("main") &&
+            document.getElementById("myOverlay")
+        ) {
+            document.getElementById("main").style.marginLeft = "0%"; 
+            document.getElementById("mySidebar").style.width = "0%"; 
+            document.getElementById("mySidebar").style.display = 'none'; 
+            document.getElementById("myOverlay").style.display = 'none'; 
+        }
+    }
 
     return <div>
 
@@ -45,14 +73,14 @@ function ReportBug () {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onClick={w3_open}><i class="fa fa-bars"></i></a>
                 <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
         <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <a href="javascript:void(0)" onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
                 <i class="fa fa-remove"></i>
             </a>
             <h4 class="w3-bar-item"><b>Menu</b></h4>
@@ -62,11 +90,11 @@ function ReportBug () {
         </nav>
 
         {/* overlay effect when opening sidebar on small screens */ }
-        <div class="w3-overlay w3-hide-large" onclick="w3_close()" title="closing side menu" id="myOverlay"></div>
+        <div class="w3-overlay w3-hide-large" onClick={w3_close} title="closing side menu" id="myOverlay"></div>
 
         {/* Main content - shift to right 250px when the sidebar is visible */ } 
 
-        <div class="w3-main">
+        <div class="w3-main" id="main">
 
             <div class="w3-row w3-padding-64">
                 <div class="w3-container">

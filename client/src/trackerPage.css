@@ -38,18 +38,28 @@
     text-align: left; 
 }
 
-button {
+.w3-button {
     border: none; 
     color: white;  
     cursor: pointer; 
     background-color: black; 
     border-radius: 8px; 
+    margin-right: 10px; 
 }
 
 .dangerButton {
     background-color: red; 
 }
 
+#input {
+  margin-right: 10px; 
+}
+
+#margin-needed {
+  margin-bottom: 10px; 
+}
+
+/*
 .footer {
     position: fixed;
     width: 100%;
@@ -79,7 +89,4 @@ button {
     text-align: right;  
     margin-right: 2%; 
   }
-
-  #margin-needed {
-    margin-left: 5px; 
-  }
+*/

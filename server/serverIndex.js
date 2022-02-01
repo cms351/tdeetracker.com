@@ -7,16 +7,26 @@ app.use(cors());
 app.use(express.json()); 
 
 const db = mysql.createConnection ({
+    
+    
     user: "root",
     host: "localhost",
     password: "password",
     database: "tdeedb", 
+    
+    
+    /*
+    user: "cstrike2", 
+    host: "localhost", 
+    password: "xxx", 
+    database: "tdeedb",
+    */
+    
 });
 
 // should be working and finished 
 app.post("/checkValidity", (req, res) => {
-    const username = req.body.username; 
-    const password = req.body.password; 
+    const username = req.body.username;  
 
     db.query(
         "SELECT count(*) AS flag FROM users WHERE username=(?)", 

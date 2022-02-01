@@ -7,6 +7,8 @@ import Axios from 'axios';
 
 function TrackerPage() {
 
+    document.title = "My Tracker - TDEETracker.com";
+
     let history = useHistory(); 
 
     // check user is logged in
@@ -58,7 +60,7 @@ function TrackerPage() {
 
     // completed inputEntry
     function inputEntry() {
-        Axios.post("http://localhost:3001/create", {
+        Axios.post("http://tdeetracker.com:3001/create", {
             username: username, 
             weight: inputWeight, 
             calories: inputCalories, 
@@ -79,7 +81,7 @@ function TrackerPage() {
             if (confirmBox == false) {
                 return; 
             }
-            Axios.post("http://localhost:3001/deleteEntry", {
+            Axios.post("http://tdeetracker.com:3001/deleteEntry", {
                 username: username,
                 deleteDate: deleteDate,
             }).then((response) => {
@@ -97,7 +99,7 @@ function TrackerPage() {
                 "This cannot be undone. Are you sure?"
             )
             if (confirmBox2 == true) {
-                Axios.post("http://localhost:3001/deleteAll", {
+                Axios.post("http://tdeetracker.com:3001/deleteAll", {
                     username: username,
                 }).then((response) => {
                     console.log("successfully deleted all entries");
@@ -107,7 +109,7 @@ function TrackerPage() {
     }
 
     function displayEntry() {
-        Axios.post("http://localhost:3001/displayEntry", {
+        Axios.post("http://tdeetracker.com:3001/displayEntry", {
             username: username, 
             todaysDate: todaysDate,
             startDate: startDate,
@@ -181,7 +183,7 @@ function TrackerPage() {
                     }
                 }
                 // if iteration date doesn't match result date OR all result dates have already been printed
-                else if (j >= response.data.result.length || iDate != response.data.result[j].date.replace("T05:00:00.000Z", "")) {
+                else if (j >= response.data.result.length || iDate !== response.data.result[j]['date'].replace("T00:00:00.000Z", "")) {
                     htmlToAdd += "<div class=\"emptyDataPoint\">";
                     htmlToAdd += "<h5>" + iDate + ": </h5>"; 
                     htmlToAdd += "<p>N/A</p>"; 
@@ -229,10 +231,10 @@ function TrackerPage() {
                 let TDEE = lastWeekCalories + calorieDeficit; 
                 htmlToAdd += "<div class=\"endPoint\">"; 
                 htmlToAdd += "<h3>You burn " + TDEE.toFixed(0) + " calories per day.</h3>"; 
-                htmlToAdd += "<h4>Average calories this week: " + thisWeekCalories + ".</h4>"; 
-                htmlToAdd += "<h4>Average weight this week: " + thisWeekWeight.toFixed(2) + ".</h4>"; 
                 htmlToAdd += "<h4>Average calories last week: " + lastWeekCalories + ".</h4>"; 
                 htmlToAdd += "<h4>Average weight last week: " + lastWeekWeight.toFixed(2) + ".</h4>"; 
+                htmlToAdd += "<h4>Average calories this week: " + thisWeekCalories + ".</h4>"; 
+                htmlToAdd += "<h4>Average weight this week: " + thisWeekWeight.toFixed(2) + ".</h4>"; 
                 htmlToAdd += "<p>Remember, the more data points you provide, the more accurate your calculations will be.</p>";  
             }
             htmlToAdd += "</div>";
@@ -261,6 +263,31 @@ function TrackerPage() {
         return date; 
     } 
 
+    function w3_open() {
+        
+        if (
+            document.getElementById("mySidebar") &&
+            document.getElementById("main")
+        ) {
+            document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebar").style.width = "25%"; 
+            document.getElementById("mySidebar").style.display = "block"; 
+        }
+    }
+
+    function w3_close() {
+        if (
+            document.getElementById("mySidebar") &&
+            document.getElementById("main") &&
+            document.getElementById("myOverlay")
+        ) {
+            document.getElementById("main").style.marginLeft = "0%"; 
+            document.getElementById("mySidebar").style.width = "0%"; 
+            document.getElementById("mySidebar").style.display = 'none'; 
+            document.getElementById("myOverlay").style.display = 'none'; 
+        }
+    }
+
 
     return <div className = "trackerPage">
 
@@ -273,14 +300,14 @@ function TrackerPage() {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+                <a class="w3-bar-item w3-button w3-right w3-hover-white w3-large w3-theme-l1 w3-hide-large" href="javascript:void(0)" onClick={w3_open}><i class="fa fa-bars"></i></a>
                 <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
         <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <a  href="javascript:void(0)" onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
                 <i class="fa fa-remove"></i>
             </a>
             <h4 class="w3-bar-item"><b>Menu</b></h4>
@@ -290,15 +317,15 @@ function TrackerPage() {
         </nav>
 
         {/* overlay effect when opening sidebar on small screens */ }
-        <div class="w3-overlay w3-hide-large" onclick="w3_close()" title="closing side menu" id="myOverlay"></div>
+        <div class="w3-overlay w3-hide-large" onClick={w3_close} title="closing side menu" id="myOverlay"></div>
 
         {/* Main content - shift to right 250px when the sidebar is visible */ } 
 
-        <div class="w3-main">
+        <div class="w3-main" id="main">
 
             <div class="w3-row w3-padding-64">
                 <div class="w3-container">
-                    <h1 class="w3-text-teal">Your Tracker</h1>
+                    <h1 class="w3-text-teal">My Tracker</h1>
                     <p id="welcome"></p>
                     <button className="w3-button w3-red w3-tiny w3-round" onClick={logOut}>Log out</button>
                    
@@ -311,18 +338,21 @@ function TrackerPage() {
                         min = "2021-01-01"
                         max = "2049-12-31"
                         onChange = { ( { target } ) => setDate(target.value)} 
+                        id = "input"
                     /> 
                     <input 
                         type = "number"
                         value = {inputCalories}
                         placeholder = "Calories"
                         onChange={ ( { target }) => setCalories(target.value)} 
+                        id = "input"
                     />
                     <input 
                         type = "number"
                         value = {inputWeight}
                         placeholder = "Weight"
                         onChange={ ( { target }) => setWeight(target.value)}
+                        id = "input" 
                     />
                     <button class="w3-button w3-green w3-tiny w3-round" id="margin-needed" onClick={verifyInput}>Log entry</button>
                     
@@ -335,13 +365,14 @@ function TrackerPage() {
                         min = "2021-01-01"
                         max = "2049-01-01"
                         onChange = { ( {target} ) => setDeleteDate(target.value)}
+                        id = "input" 
                     />
                     <button class="w3-button w3-red w3-tiny w3-round" id="margin-needed" onClick={deleteEntry}>Delete entry</button>
                     
                     <hr/>
 
                     <h3 class="w3-text-teal">Display data</h3>
-                    <button class="w3-button w3-green w3-tiny w3-round" onClick={displayEntry}>Display last four weeks of entries</button>
+                    <button class="w3-button w3-green w3-tiny w3-round" onClick={displayEntry} id="margin-needed">Display last four weeks of entries</button>
                     <button class="w3-button w3-green w3-tiny w3-round" id="margin-needed" onClick={displayEntry}>Update table</button>
                     <button class="w3-button w3-red w3-tiny w3-round" id="margin-needed" onClick={deleteAll}>Delete all entries</button>
                     <div className="results" id="results"></div>
