@@ -1,10 +1,11 @@
-import React from 'react'; 
-import {Link} from 'react-router-dom';
+import React from 'react';
 
 function help() {
 
+    // retitle tab name in browser
     document.title = "Help - TDEETracker.com"; 
 
+    // open menu function
     function w3_open() {
         
         if (
@@ -17,6 +18,7 @@ function help() {
         }
     }
 
+    // close menu function
     function w3_close() {
         if (
             document.getElementById("mySidebar") &&
@@ -41,14 +43,14 @@ function help() {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onClick={w3_open}><i class="fa fa-bars"></i></a>
+                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i class="fa fa-bars"></i></a>
                 <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
         <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a href="javascript:void(0)" onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <a onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
                 <i class="fa fa-remove"></i>
             </a>
             <h4 class="w3-bar-item"><b>Menu</b></h4>

@@ -2,29 +2,26 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
+const bcrypt = require("bcrypt"); 
+const saltRounds = 10; 
 
 app.use(cors()); 
 app.use(express.json()); 
 
 const db = mysql.createConnection ({
     
-    
     user: "root",
     host: "localhost",
     password: "password",
     database: "tdeedb", 
     
-    
-    /*
-    user: "cstrike2", 
-    host: "localhost", 
-    password: "xxx", 
-    database: "tdeedb",
-    */
-    
 });
 
-// should be working and finished 
+// *********
+// need to add function to handle disconnect
+// *********
+
+// check that username exists in database
 app.post("/checkValidity", (req, res) => {
     const username = req.body.username;  
 
@@ -45,58 +42,52 @@ app.post("/checkValidity", (req, res) => {
 
 }); 
 
-app.post("/checkValidityLogin", (req, res) => {
+// find username, compare password input to encrypted password stored in the database
+app.post("/login", (req, res) => {
 
     const username = req.body.username; 
-    const password = req.body.password; 
+    const passwordPreEncryption = req.body.password; 
 
     db.query(
-        "SELECT count(*) AS flag FROM users WHERE username=(?) AND password=(?)",
-        [username, password], 
-        (err, result) => {
+        "SELECT password FROM users WHERE username=(?)",
+        [username, passwordPreEncryption], 
+        async (err, result) => {
             if (err) {
                 console.log("Error when checking login validity."); 
                 console.log(err); 
             }
             else {
-                console.log("made it to else in server"); 
-                res.json( { "flag": result[0].flag } ); 
+                // if there are matching usernames, compare the password to our encrypted password
+                // if matching password, authorize. Otherwise, reject. 
+                if (result.length > 0) {
+                    const comparison = await bcrypt.compare(passwordPreEncryption, result[0].password);
+
+                    if (comparison) {
+                        res.json( { "authorization": 1 } ); 
+                    }
+                    else {
+                        res.json( { "authorization": 0 } ); 
+                    }
+                }
+                else { // reject if there are no matching usernames
+                    res.json( { "authorization": 0 } ); 
+                }
             }
         }
 
     );
 });
 
-// seems to be working correctly
-app.post("/login", (req, res) => {
-    
-    const inputUser = req.body.username;
-    const inputPassword = req.body.password; 
-    let flag = false; 
-    
-    db.query(
-        "SELECT 1 FROM users WHERE username = (?)", 
-        [inputUser], 
-        (err, result) => {
-            if (err) {
-                console.log("Error during login."); 
-                console.log(err); 
-            }
-            else {
-                
-            }
-        }
-    )
-});
-
-// bug fixed. Needed "res.send" code. 
-// seems to work correctly now.
-app.post("/register", (req, res)=> {
+// encrypts password input, inputs username and encrypted password into users database
+app.post("/register", async (req, res)=> {
 
     const username = req.body.username; 
-    const password = req.body.password; 
+    const passwordToRegister = req.body.password; 
+    const password = await bcrypt.hash(passwordToRegister, saltRounds); 
 
     console.log("made it into backend register"); 
+
+    
 
     db.query(
         "INSERT INTO users (username, password) VALUES (?, ?)", 
@@ -114,8 +105,7 @@ app.post("/register", (req, res)=> {
 
 });
 
-// should be working but work in progress
-// fixed bug when creating two entries on the same date with the same user, now it just updates the entry
+// inserts calorie/weight log into tdeetable database under user's username
 app.post("/create", (req, res) => {
 
     const username = req.body.username;
@@ -139,6 +129,7 @@ app.post("/create", (req, res) => {
 
 });
 
+// inputs user's bug ticket into bug database
 app.post("/submitBug", (req, res) => {
     const description = req.body.description;
     const cause = req.body.cause; 
@@ -158,6 +149,7 @@ app.post("/submitBug", (req, res) => {
     );
 });
 
+// removes entries that match inputted username and date in tdeetable database
 app.post("/deleteEntry", (req, res) => {
 
     const username = req.body.username; 
@@ -178,6 +170,7 @@ app.post("/deleteEntry", (req, res) => {
     );
 });
 
+// removes all entries from the username in the tdeetable database
 app.post("/deleteAll", (req, res) => {
 
     const username = req.body.username; 
@@ -197,14 +190,7 @@ app.post("/deleteAll", (req, res) => {
     )
 })
 
-// bug: breaks the server when I try to access values for a date / username combo that doesn't exist in the server
-//
-// I know I could do a second query that validates that the date / username combination exists in the 
-// server, then run the displayEntry query if it does exist.
-//
-// but I'd prefer some cleaner way to do it
-// I feel like there's some way to just return null or 0 in this query if that username / date combo 
-// doesn't exist on the server. Don't know if that's possible though. 
+// displays all user entries of the last four weeks under username in tdeetable 
 app.post("/displayEntry", (req, res) => {
     const username = req.body.username; 
     const todaysDate = req.body.todaysDate; 
@@ -216,12 +202,12 @@ app.post("/displayEntry", (req, res) => {
         (err, result) => {
             if (err) {
                 console.log(err); 
-                res.json( { "Error": "Error in the backend - display entry." } ); 
+                res.json( { "Error": "Error in the backend. Please try again later." } ); 
             }
             else if (result != undefined && result.length > 0) {
                 res.json( { "result": result } ); 
             } else {
-                res.json( { "Error": "No such user." } ); 
+                res.json( { "Error": "No available user data. Try logging a new entry." } ); 
             }
         }
     )

@@ -1,56 +1,78 @@
 import './App.css';
-import { useState } from "react";
 import Axios from 'axios';
 import React from "react";
-import {BrowserRouter as Router, Route, Switch, Link, useHistory } from "react-router-dom"; 
-import createAccount from "./createAccount"; 
-import contact from "./contact"; 
-import helpPage from "./helpPage"; 
-import trackerPage from "./trackerPage"; 
-import reportBug from "./reportBug"; 
-//import calorieTracker from "./calorieTracker"; 
-//import calorieHistory from "./calorieHistory"; 
+import {useHistory } from "react-router-dom"; 
 
 
 const HomePage = () => {
 
+    // changes tab name in browser
     document.title = "Log In - TDEETracker.com"; 
 
+    // allows us to redirect between pages
     let history = useHistory(); 
     
+    // username/password variables
     const [logUsername, setLogUsername] = React.useState(""); 
     const [logPassword, setLogPassword] = React.useState(""); 
 
+    // necessary variable to prevent multiple calls to database at once
+    var executed = false; 
+
+    // if already logged in, push them to the tracker page
     if (localStorage.getItem("user")) 
     {
         history.push("/trackerPage"); 
     }
 
-    function checkValidityLogin() {
-
-        if (logUsername.length < 6 || logPassword.length < 6) {
-            alert("Incorrect username or password."); 
-            return; 
-        }
-
-        Axios.post("http://tdeetracker.com:3001/checkValidityLogin", {
-            username: logUsername, 
-            password: logPassword, 
-        }
-        ).then((response) => {
-            console.log(response.data.flag); 
-            if (response.data.flag == 0) {
-                alert("Error. Incorrect username or password.");
+    // log in query
+    function logIn() {
+        
+        // implementation that prevents multiple calls to the database at once
+        if (!executed) {
+            executed = true; 
+            // check for obvious issues before querying the database
+            if (logUsername.length < 6 || logPassword.length < 6) {
+                alert("Incorrect username or password."); 
+                // allow another call to the database
+                setTimeout(() => { executed = false }, 200); 
+                return; 
             }
-            else {
-                console.log("Success!"); 
-                localStorage.setItem('user', logUsername); 
-                console.log(localStorage.getItem('user'));
-                history.push("/trackerPage"); 
+
+            if (logUsername === logPassword) {
+                alert("Incorrect username or password."); 
+                setTimeout(() => { executed = false }, 200); 
+                return; 
             }
-        }).catch((error) => { console.log(error) } ); 
+
+            Axios.post("http://tdeetracker.com:3001/login", {
+                username: logUsername, 
+                password: logPassword, 
+            }
+            ).then((response) => {
+                // allow another call to the database
+                executed = false; 
+
+                if (response.data.authorization === 0) { // if backend rejects input, deny access
+                    alert("Error. Incorrect username or password.");
+                    setTimeout(() => { executed = false }, 200); 
+                    return; 
+                }
+                else { // if backend accepts
+                    // save username locally
+                    // this signals to the other pages that the user is logged in already
+                    localStorage.setItem('user', logUsername); 
+                    // push the user to the tracker page
+                    history.push("/trackerPage"); 
+                }
+            }).catch((error) => { 
+                setTimeout(() => { executed = false }, 2000); 
+                console.log(error);
+            });
+        }
     };
 
+    // opens up the menu
     function w3_open() {
         
         if (
@@ -63,6 +85,7 @@ const HomePage = () => {
         }
     }
 
+    // closes the menu
     function w3_close() {
         if (
             document.getElementById("mySidebar") &&
@@ -76,6 +99,15 @@ const HomePage = () => {
         }
     }
 
+    // submit logIn form if user presses enter
+    document.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); 
+            document.getElementById("login-button").click(); 
+        }
+    });
+
+
     return (
         <>
 
@@ -88,14 +120,14 @@ const HomePage = () => {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onClick={w3_open}><i class="fa fa-bars"></i></a>
+                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i class="fa fa-bars"></i></a>
                 <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
         <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a href="javascript:void(0)" onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <a onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
                 <i class="fa fa-remove"></i>
             </a>
             <h4 class="w3-bar-item"><b>Menu</b></h4>
@@ -145,20 +177,24 @@ const HomePage = () => {
                     </p>
                     <h3 class="w3-text-teal">Log in</h3>
                     <label htmlFor="username">Username: </label>
+                    <br/><br/>
                     <input 
                         type="text"
                         value={logUsername}
                         placeholder="Enter a username"
                         onChange={ ( { target }) => setLogUsername(target.value)}
-                    />       
+                    />
+                    <br/><br/>       
                     <label htmlFor="password">Password: </label>
+                    <br/><br/>
                     <input 
                         type="password" 
                         value={logPassword}
                         placeholder="Enter a password"
-                        onChange={ ( { target }) => setLogPassword(target.value)} 
+                        onChange={ ( { target }) => setLogPassword(target.value)}
+                        id="passwordInput" 
                     />
-                    <button class="w3-button w3-green w3-round w3-tiny" type="submit" id="login-button" onClick={checkValidityLogin}>Login</button>
+                    <button class="w3-button w3-green w3-round w3-tiny" type="submit" id="login-button" onClick={logIn}>Login</button>
                 </div>
             </div>
         </div>

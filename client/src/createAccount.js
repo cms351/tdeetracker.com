@@ -1,81 +1,103 @@
 import React from 'react'; 
-import { useState } from 'react'; 
-import {Link} from 'react-router-dom'; 
 import Axios from 'axios'; 
-import trackerPage from "./trackerPage"; 
-import {Route} from 'react-router-dom'; 
 import { useHistory } from 'react-router-dom'; 
 import "./createAccount.css";
-// const bcrypt = require("bcrypt"); 
-// const express = require("express"); 
+
+
 
 
 
 function CreateAccount() {
 
+    // change title of tab in browser
     document.title = "Register - TDEETracker.com";  
 
+    // allow us to redirect the user to other pages
     let history = useHistory();  
 
+    // all the necessary login variables
     const [usernameToRegister, setUsername] = React.useState(""); 
     const [passwordToRegister, setPassword] = React.useState(""); 
     const [confirmPassword, setConfirmPassword] = React.useState(""); 
 
+    // necessary variable to prevent multiple calls to database at once
+    var executed = false; 
+
+    // if the users already logged in, push them to tracker page
     if (localStorage.getItem("user")) {
         history.push("/trackerPage"); 
     }
 
-    // this seems to work correctly after testing
-    // calls register function if username is unique, sends an error if it is not unique
+
+    // function/query to check if username is valid
     function checkValidity() {
 
-        if (passwordToRegister.length < 6 || usernameToRegister.length < 6 || passwordToRegister.length > 15 || usernameToRegister.length > 15) {
-            alert("Error. Both username and password must between 6 and 15 characters in length."); 
-            return; 
-        }
+        // implementation that prevents multiple calls to the database at once
+        if (!executed) {
+            executed = true; 
+            // check for obvious issues before querying the server
+            if (passwordToRegister.length < 6 || usernameToRegister.length < 6 || passwordToRegister.length > 15 || usernameToRegister.length > 15) {
+                alert("Error. Both username and password must between 6 and 15 characters in length."); 
+                // allow another call to the database
+                setTimeout(() => { executed = false }, 200);  
+                return; 
+            }
 
-        if (passwordToRegister !== confirmPassword) {
-            alert("Error. Passwords do not match."); 
-            return; 
-        }
+            if (passwordToRegister !== confirmPassword) {
+                alert("Error. Passwords do not match."); 
+                setTimeout(() => { executed = false }, 200);  
+                return; 
+            }
 
-        if (passwordToRegister === usernameToRegister) {
-            alert("Error. Your username and password cannot be the same."); 
-            return; 
-        }
+            if (passwordToRegister === usernameToRegister) {
+                alert("Error. Your username and password cannot be the same."); 
+                setTimeout(() => { executed = false }, 200); 
+                return; 
+            }
         
-        Axios.post("http://tdeetracker.com:3001/checkValidity", {
-            username: usernameToRegister, 
+            // query server
+            Axios.post("http://tdeetracker.com:3001/checkValidity", {
+                username: usernameToRegister, 
+            }
+            ).then((response) => {
+                if (response.data.flag !== 0) { // if it does not return 0 results for that username
+                    alert("Error. Username already exists."); // tell user issue
+                    setTimeout(() => { executed = false }, 200);  
+                    return; 
+                }
+                else {
+                    register(); 
+                }
+            }).catch((error) => { 
+                console.log(error);
+                setTimeout(() => { executed = false }, 200);  
+            }); 
         }
-        ).then((response) => {
-            console.log(response.data.flag); 
-            if (response.data.flag != 0) {
-                alert("Error. Username already exists.");
-            }
-            else {
-                register(); 
-            }
-        }).catch((error) => { console.log(error) } ); 
     }
 
-    // updates SQL server correctly but does not save the username to local storage correctly
-    // log in seems to do so perfectly fine
-    // validation seems to work
-    function register() {
-        console.log("made it to register"); 
-        Axios.post("http://tdeetracker.com:3001/register", {
-            username: usernameToRegister, 
-            password: passwordToRegister, 
+
+    // function/query to actually register new user
+    function register(req, res) {
+
+        Axios.post("http://tdeetracker.com:3001/register",  {
+            username: usernameToRegister,
+            password: passwordToRegister,
         }
-        ).then((response) => {
-            console.log("made it to register response"); 
-            console.log(response); 
+        ).then((response) => { // if no issues registering the user
+            // save username locally, this is how we tell a user is logged in already
             localStorage.setItem('user', usernameToRegister); 
-            console.log(localStorage.getItem('user'));
+            // push the user to the tracker page
             history.push('/trackerPage'); 
-        }).catch((error) => { console.log(error) } );
+            // allow another call to the database
+            executed = false; // not using a timeout for this one because we're pushed to another page
+        }).catch((error) => { 
+            console.log(error);
+            setTimeout(() => { executed = false }, 200);   
+        });
     }; 
 
+
+    // open menu function
     function w3_open() {
         
         if (
@@ -88,6 +110,8 @@ function CreateAccount() {
         }
     }
 
+
+    // close menu function
     function w3_close() {
         if (
             document.getElementById("mySidebar") &&
@@ -101,6 +125,14 @@ function CreateAccount() {
         }
     }
 
+    // submit registration form if user presses enter
+    document.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            // event.preventDefault(); 
+            document.getElementById("register").click(); 
+        }
+    });
+
     return <div className = "createAccountPage">
 
         {/* external stylesheets */ }
@@ -112,14 +144,14 @@ function CreateAccount() {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onClick={w3_open}><i class="fa fa-bars"></i></a>
+                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i class="fa fa-bars"></i></a>
                 <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
         <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a href="javascript:void(0)" onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <a onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
                 <i class="fa fa-remove"></i>
             </a>
             <h4 class="w3-bar-item"><b>Menu</b></h4>
