@@ -378,6 +378,7 @@ function TrackerPage() {
                     <hr/>
 
                     <h3 class="w3-text-teal">Input new log:</h3>
+                    <br/>
                     <input 
                         type = "date"
                         value = {inputDate}
@@ -386,6 +387,7 @@ function TrackerPage() {
                         onChange = { ( { target } ) => setDate(target.value)} 
                         id = "input"
                     /> 
+                    <br/><br/>
                     <input 
                         type = "number"
                         value = {inputCalories}
@@ -393,6 +395,8 @@ function TrackerPage() {
                         onChange={ ( { target }) => setCalories(target.value)} 
                         id = "input"
                     />
+                    <br/>
+                    <br/>
                     <input 
                         type = "number"
                         value = {inputWeight}
@@ -400,11 +404,14 @@ function TrackerPage() {
                         onChange={ ( { target }) => setWeight(target.value)}
                         id = "weightInputBox" 
                     />
+                    <br/>
+                    <br/>
                     <button class="w3-button w3-green w3-tiny w3-round" id="margin-needed" onClick={verifyInput}>Log entry</button>
                     
                     <hr/>
 
                     <h3 class="w3-text-teal">Delete a log:</h3>
+                    <br/> 
                     <input
                         type = "date"
                         value = {deleteDate}
@@ -413,11 +420,13 @@ function TrackerPage() {
                         onChange = { ( {target} ) => setDeleteDate(target.value)}
                         id = "input" 
                     />
+                    <br/><br/>
                     <button class="w3-button w3-red w3-tiny w3-round" id="margin-needed" onClick={deleteEntry}>Delete entry</button>
                     
                     <hr/>
 
-                    <h3 class="w3-text-teal">Display data</h3>
+                    <h3 class="w3-text-teal">Display data:</h3>
+                    <br/>
                     <button class="w3-button w3-green w3-tiny w3-round" onClick={displayEntry} id="margin-needed">Display last four weeks of entries</button>
                     <button class="w3-button w3-green w3-tiny w3-round" id="margin-needed" onClick={displayEntry}>Update table</button>
                     <button class="w3-button w3-red w3-tiny w3-round" id="margin-needed" onClick={deleteAll}>Delete all entries</button>
