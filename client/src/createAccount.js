@@ -157,7 +157,7 @@ function CreateAccount() {
             <h4 class="w3-bar-item"><b>Menu</b></h4>
             <a class="w3-bar-item w3-button w3-hover-black" href="/">Log In</a>
             <a class="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Info</a>
+            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
             <a class="w3-bar-item w3-button w3-hover-black" href="/reportBug">Report Bug</a>
         </nav>
 
@@ -173,8 +173,10 @@ function CreateAccount() {
                     <h1 class="w3-text-teal">Register New Account</h1>
                     <p>
                         Create an account below. We do not require an email, 
-                        nor any payment information - just a username
+                        nor any payment information. We just require a username
                         and password to save your progress to a personalized profile. 
+                        Don't worry - your password is encrypted before ever being
+                        stored in our database. 
                     </p>
                 <label>Username: </label>
                 <br/><br/>

@@ -358,7 +358,7 @@ function TrackerPage() {
             </a>
             <h4 class="w3-bar-item"><b>Menu</b></h4>
             <a class="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Info</a>
+            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
             <a class="w3-bar-item w3-button w3-hover-black" href="/reportBug">Report Bug</a>
         </nav>
 

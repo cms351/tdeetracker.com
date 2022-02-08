@@ -133,7 +133,7 @@ const HomePage = () => {
             <h4 class="w3-bar-item"><b>Menu</b></h4>
             <a class="w3-bar-item w3-button w3-hover-black" href="/createAccount">Register New Account</a>
             <a class="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Info</a>
+            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
             <a class="w3-bar-item w3-button w3-hover-black" href="/reportBug">Report Bug</a>
         </nav>
 
@@ -149,7 +149,7 @@ const HomePage = () => {
                     <h1 class="w3-text-teal">Hello! Welcome to TDEETracker.com.</h1>
                     <p>
                         This website is designed
-                        to track your total daily energy expenditure, or TDEE. TDEE is
+                        to track your TDEE (Total Daily Energy Expenditure). TDEE is
                         the total number of calories you burn each day.
                     </p>
                     <h3 class="w3-text-teal">How It Works</h3>
@@ -166,7 +166,7 @@ const HomePage = () => {
                     </p>
                     <h3 class="w3-text-teal">Why This Site Exists</h3>
                     <p>
-                        Once upon a time, somebody made a spreadsheet that allowed you to calculate your TDEE 
+                        Somebody once made a spreadsheet that allowed you to calculate your TDEE 
                         just by logging your weight and calorie intake each day.  It was very popular and incredibly 
                         accurate. Unfortunately, 
                         this spreadsheet was taken down by its original creator - it's assumed that it was meant to 
