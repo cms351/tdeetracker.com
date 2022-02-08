@@ -51,8 +51,8 @@ function TrackerPage() {
     function verifyInput() {
         if (!executed) {
             executed = true; 
-            if (inputWeight < 0 || inputCalories < 0 || inputDate === "" || inputWeight === "" || inputCalories === "" ) {
-                alert("Invalid input"); 
+            if (inputWeight < 40 || inputCalories < 0 || inputDate === "" || inputWeight === "" || inputCalories === "" || inputWeight > 500 || inputCalories > 10000) {
+                alert("Invalid input.\nNo null input allowed.\nAllowed weight range is 40-500.\nAllowed calorie range is 0-10,000."); 
                 // allow another call to the database
                 setTimeout(() => { executed = false }, 200);
                 return; 
@@ -379,6 +379,7 @@ function TrackerPage() {
 
                     <h3 class="w3-text-teal">Input new log:</h3>
                     <br/>
+                    <p><i>Date:</i></p>
                     <input 
                         type = "date"
                         value = {inputDate}
@@ -388,6 +389,7 @@ function TrackerPage() {
                         id = "input"
                     /> 
                     <br/><br/>
+                    <p><i>Calories:</i></p>
                     <input 
                         type = "number"
                         value = {inputCalories}
@@ -397,6 +399,7 @@ function TrackerPage() {
                     />
                     <br/>
                     <br/>
+                    <p><i>Weight:</i></p>
                     <input 
                         type = "number"
                         value = {inputWeight}
@@ -412,6 +415,7 @@ function TrackerPage() {
 
                     <h3 class="w3-text-teal">Delete a log:</h3>
                     <br/> 
+                    <p><i>Date:</i></p>
                     <input
                         type = "date"
                         value = {deleteDate}
