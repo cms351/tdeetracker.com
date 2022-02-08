@@ -107,7 +107,7 @@ function TrackerPage() {
                     console.log(error);
                     setTimeout(() => { executed = false }, 200);
                 }); 
-        } 
+            } 
         }
         
     }
