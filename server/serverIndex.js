@@ -8,24 +8,49 @@ const saltRounds = 10;
 app.use(cors()); 
 app.use(express.json()); 
 
-const db = mysql.createConnection ({
+// config to create MySQL connections
+const dbConfig = {
 
     user: "root",
     host: "localhost", 
     password: "password",
     database: "tdeedb",   
     
-});
+};
 
-// *********
-// need to add function to handle disconnect
-// *********
+// establish initial connection
+var connection; 
+handleDisconnect(); 
+
+// handle disconnect
+function handleDisconnect() {
+
+    connection = mysql.createConnection(dbConfig); 
+
+    connection.connect(function(err) {
+        if (err) {
+            console.log("Error when connecting to database.", err); 
+            setTimeout(handleDisconnect, 2000); 
+        }
+    }); 
+
+    connection.on("error", function(err) {
+        console.log("Database error.", err); 
+        if (err.code === "PROTOCOL_CONNECTION_LOST") {
+            handleDisconnect(); 
+        }
+        else {
+            throw err;
+        }
+    }); 
+    
+}
 
 // check that username exists in database
 app.post("/checkValidity", (req, res) => {
     const username = req.body.username;  
 
-    db.query(
+    connection.query(
         "SELECT count(*) AS flag FROM users WHERE username=(?)", 
         [username], 
         (err, result) => {
@@ -48,7 +73,7 @@ app.post("/login", (req, res) => {
     const username = req.body.username; 
     const passwordPreEncryption = req.body.password; 
 
-    db.query(
+    connection.query(
         "SELECT password FROM users WHERE username=(?)",
         [username, passwordPreEncryption], 
         async (err, result) => {
@@ -89,7 +114,7 @@ app.post("/register", async (req, res)=> {
 
     
 
-    db.query(
+    connection.query(
         "INSERT INTO users (username, password) VALUES (?, ?)", 
         [username, password], 
         (err, result) => {
@@ -113,7 +138,7 @@ app.post("/create", (req, res) => {
     const calories = req.body.calories;
     const date = req.body.date;
 
-    db.query(
+    connection.query(
         "INSERT INTO tdeetable (username, weight, calories, date) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE weight = ('"+weight+"'), calories = ('"+calories+"')",
         [username, weight, calories, date], 
         (err, result) => {
@@ -134,7 +159,7 @@ app.post("/submitBug", (req, res) => {
     const description = req.body.description;
     const cause = req.body.cause; 
 
-    db.query(
+    connection.query(
         'INSERT INTO bugs (description, cause) VALUES (?, ?)',
         [description, cause], 
         (err, result) => {
@@ -155,7 +180,7 @@ app.post("/deleteEntry", (req, res) => {
     const username = req.body.username; 
     const deleteDate = req.body.deleteDate; 
 
-    db.query(
+    connection.query(
         "DELETE FROM tdeetable WHERE username = (?) AND date = (?)", 
         [username, deleteDate], 
         (err, result) => {
@@ -175,7 +200,7 @@ app.post("/deleteAll", (req, res) => {
 
     const username = req.body.username; 
 
-    db.query(
+    connection.query(
         "DELETE FROM tdeetable WHERE username = (?)", 
         [username],
         (err, result) => {
@@ -196,7 +221,7 @@ app.post("/displayEntry", (req, res) => {
     const todaysDate = req.body.todaysDate; 
     const startDate = req.body.startDate; 
 
-    db.query(
+    connection.query(
         "SELECT date, weight, calories FROM tdeetable WHERE username = (?) AND date >= (?) AND date <= (?)", 
         [username, startDate, todaysDate], 
         (err, result) => {
@@ -216,7 +241,7 @@ app.post("/displayEntry", (req, res) => {
 // John's code for reference
 app.get("/summary", (req, res) => {
 
-    db.query(
+    connection.query(
         "SELECT min(weight) AS min_weight FROM tdeedb.tdeetable;",
         [], 
         (err, result) => {
