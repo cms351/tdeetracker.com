@@ -103,32 +103,32 @@ function ReportBug () {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i class="fa fa-bars"></i></a>
-                <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
+                <a className="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i className="fa fa-bars"></i></a>
+                <a href="/" className="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
-        <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
-                <i class="fa fa-remove"></i>
+        <nav className="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+            <a onClick={w3_close} className="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+                <i className="fa fa-remove"></i>
             </a>
-            <h4 class="w3-bar-item"><b>Menu</b></h4>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/">Home</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
+            <h4 className="w3-bar-item"><b>Menu</b></h4>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/">Home</a>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
         </nav>
 
         {/* overlay effect when opening sidebar on small screens */ }
-        <div class="w3-overlay w3-hide-large" onClick={w3_close} title="closing side menu" id="myOverlay"></div>
+        <div className="w3-overlay w3-hide-large" onClick={w3_close} title="closing side menu" id="myOverlay"></div>
 
         {/* Main content - shift to right 250px when the sidebar is visible */ } 
 
-        <div class="w3-main" id="main">
+        <div className="w3-main" id="main">
 
-            <div class="w3-row w3-padding-64">
-                <div class="w3-container">
-                    <h1 class="w3-text-teal">Report Bug</h1>
+            <div className="w3-row w3-padding-64">
+                <div className="w3-container">
+                    <h1 className="w3-text-teal">Report Bug</h1>
                     <p>
                         Thanks for reporting the bug you found, it makes my life a lot
                         easier. Below, please include a description (what the bug is)
@@ -136,8 +136,8 @@ function ReportBug () {
                         can try to replicate it). Each text box only accepts up to 
                         255 character submissions, so please keep that in mind.
                     </p>
-                    <h3 class="w3-text-teal">Description: </h3>
-                    <h6 class="w3-text-teal">{characterCount}/255</h6>
+                    <h3 className="w3-text-teal">Description: </h3>
+                    <h6 className="w3-text-teal">{characterCount}/255</h6>
                     <textarea
                         placeholder = "What is the bug?"
                         onChange={(e) => { 
@@ -145,8 +145,8 @@ function ReportBug () {
                             setDescription(e.target.value);
                         }}
                     ></textarea>
-                    <h3 class="w3-text-teal">Cause: </h3>
-                    <h6 class="w3-text-teal">{characterCount2}/255</h6>
+                    <h3 className="w3-text-teal">Cause: </h3>
+                    <h6 className="w3-text-teal">{characterCount2}/255</h6>
                     <textarea
                         placeholder = "How did you trigger the bug?"
                         onChange={(e) => { 
@@ -155,7 +155,7 @@ function ReportBug () {
                         }}
                     ></textarea>
                     <br/>
-                    <button class="w3-button w3-green w3-round w3-small" type="submit" onClick={submitBug} id="submit-ticket">Submit</button>
+                    <button className="w3-button w3-green w3-round w3-small" type="submit" onClick={submitBug} id="submit-ticket">Submit</button>
                     <p id="confirmation"></p>
                 </div>
             </div>

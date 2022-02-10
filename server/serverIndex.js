@@ -8,13 +8,12 @@ const saltRounds = 10;
 app.use(cors()); 
 app.use(express.json()); 
 
-const db = mysql.createPool ({
+const db = mysql.createConnection ({
 
     user: "root",
-    host: "localhost",
+    host: "localhost", 
     password: "password",
-    database: "tdeedb", 
-    connectionLimit: 10, 
+    database: "tdeedb",   
     
 });
 

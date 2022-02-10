@@ -126,10 +126,12 @@ function CreateAccount() {
     }
 
     // submit registration form if user presses enter
-    document.addEventListener("keyup", function(event) {
+    document.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-            // event.preventDefault(); 
-            document.getElementById("register").click(); 
+            event.preventDefault(); 
+            if (document.getElementById("register")) {
+                document.getElementById("register").click(); 
+            } 
         }
     });
 
@@ -144,33 +146,33 @@ function CreateAccount() {
         {/*navbar at top */}
         <div className = "w3-top">
             <div className= "w3-bar w3-theme w3-top w2-left-align w3-large">
-                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i class="fa fa-bars"></i></a>
-                <a href="/" class="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
+                <a className="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" onClick={w3_open}><i className="fa fa-bars"></i></a>
+                <a href="/" className="w3-bar-item w3-button w3-theme-l1">TDEETracker.com</a>
             </div>
         </div>
 
         {/* sidebar */}
-        <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
-            <a onClick={w3_close} class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
-                <i class="fa fa-remove"></i>
+        <nav className="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+            <a onClick={w3_close} className="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+                <i className="fa fa-remove"></i>
             </a>
-            <h4 class="w3-bar-item"><b>Menu</b></h4>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/">Log In</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
-            <a class="w3-bar-item w3-button w3-hover-black" href="/reportBug">Report Bug</a>
+            <h4 className="w3-bar-item"><b>Menu</b></h4>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/">Log In</a>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/helpPage">Help</a>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/contact">Developer Resumé</a>
+            <a className="w3-bar-item w3-button w3-hover-black" href="/reportBug">Report Bug</a>
         </nav>
 
         {/* overlay effect when opening sidebar on small screens */ }
-        <div class="w3-overlay w3-hide-large" onClick={w3_close} title="closing side menu" id="myOverlay"></div>
+        <div className="w3-overlay w3-hide-large" onClick={w3_close} title="closing side menu" id="myOverlay"></div>
 
         {/* Main content - shift to right 250px when the sidebar is visible */ } 
 
-        <div class="w3-main" id="main">
+        <div className="w3-main" id="main">
 
-            <div class="w3-row w3-padding-64">
-                <div class="w3-container">
-                    <h1 class="w3-text-teal">Register New Account</h1>
+            <div className="w3-row w3-padding-64">
+                <div className="w3-container">
+                    <h1 className="w3-text-teal">Register New Account</h1>
                     <p>
                         Create an account below. We do not require an email, 
                         nor any payment information. We just require a username
@@ -208,7 +210,7 @@ function CreateAccount() {
                     }}
                 />
                 <br/><br/>
-                <button class="w3-btn w3-green w3-round w3-medium" id="register" onClick = { checkValidity }>Register</button>
+                <button className="w3-btn w3-green w3-round w3-medium" id="register" onClick = { checkValidity }>Register</button>
                 </div>
             </div>
         </div>
