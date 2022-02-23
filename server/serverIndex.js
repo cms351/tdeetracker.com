@@ -232,7 +232,7 @@ app.post("/displayEntry", (req, res) => {
             else if (result != undefined && result.length > 0) {
                 res.json( { "result": result } ); 
             } else {
-                res.json( { "Error": "No available user data. Try logging a new entry." } ); 
+                res.json( { "Error": "No available user data in the last four weeks. Try logging a new entry." } ); 
             }
         }
     )
