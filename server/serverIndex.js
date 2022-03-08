@@ -36,7 +36,7 @@ function handleDisconnect() {
 
     connection.on("error", function(err) {
         console.log("Database error.", err); 
-        if (err.code === "PROTOCOL_CONNECTION_LOST") {
+        if (err.code === "PROTOCOL_CONNECTION_LOST" || err.code === "PROTOCOL_PACKETS_OUT_OF_ORDER") {
             handleDisconnect(); 
         }
         else {
